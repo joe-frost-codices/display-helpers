@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<title>QuizKit Testing Ground </title>
+<link href="https://fonts.googleapis.com/css?family=B612+Mono|PT+Mono|Roboto+Mono|Source+Code+Pro" rel="stylesheet">
+<style type="text/css">
+@font-face {
+  font-family: myFont;
+  src: url("balsamiq/BalsamiqSansRegular.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {text-align:center;}
+.b612 {
+font-family: "B612 Mono"; text-align:center;
+}
+.roboto-mono {
+font-family: "Roboto Mono";
+}
+.pt-mono {
+font-family: "PT Mono";
+}
+.balsamiq {
+font-family: myFont;
+}
+.source-code-pro {
+font-family: "Source Code Pro";
+}
+.count-button {
+	margin: 40px auto 40px auto;
+	text-align:center;
+	padding:9px 20px;
+	background:#eee;
+	border-radius:3px;
+	display:inline-block;
+	cursor:pointer;
+	font-family: "B612 Mono"; text-align:center;
+}
+.font-button {
+	margin: 20px auto 30px auto;
+	text-align:center;
+	padding:7px 15px;
+	
+	border-radius:3px;
+	display:inline-block;
+	cursor:pointer;
+	font-family: "B612 Mono"; text-align:center;
+}
+.active {
+background:#999;
+color:#fff;
+}
+.inactive {
+background:#eee;
+color:#000;
+}
+.counter-display {
+	margin:30px auto;
+	color:#ffffff;
+	background:#f4a021;
+	width:200px;
+	height:200px;
+	border-radius:100px;
+	display:flex;
+	justify-content: center;
+    align-items: center;
+    font-size:45px;
+    box-shadow: 2px 2px 6px rgba(0,0,0,.3);
+}
+</style>
+</head>
+<body>
+<div class="container">
+	<div class="counter-display balsamiq" id="counter">
+	</div>
+<div class="count-button">Start Counter</div><br />
+<div class="font-buttons">
+	<div class="font-button active" data-value="balsamiq">Balsamiq</div>
+	<div class="font-button inactive" data-value="b612">B612 Mono</div>
+	<div class="font-button inactive" data-value="roboto-mono">Roboto Mono</div>
+	<div class="font-button inactive" data-value="pt-mono">PT Mono</div>
+	<div class="font-button inactive" data-value="source-code-pro">Source Code Pro</div>
+</div>	
+</body>
+<script>
+	const timeMax = 1111, timeMin = -1111;
+	let time = timeMax;
+	let timerReady = true;
+	let counterDisplay = document.querySelector(".counter-display");
+	let timer;
+	let counterCircle = document.querySelector("#counter");
+
+	counterDisplay.textContent = timeMax;
+	let fontButtons = document.querySelectorAll(".font-button");
+	for (let i=0 ; i < fontButtons.length; i++) {
+		fontButtons[i].addEventListener("click",(el) => {
+		const newFont = el.target.getAttribute("data-value");
+		counterDisplay.className = "counter-display " + newFont;
+		for (let j=0 ; j < fontButtons.length ; j++) {
+			fontButtons[j].className = "font-button inactive";
+		}
+		fontButtons[i].className = "font-button active";
+		el.stopImmediatePropagation();
+	});
+	}
+	document.querySelector(".count-button").addEventListener("click",() => {
+		if (timerReady) {
+			timer = setInterval(startCounter, 1);
+			document.querySelector(".count-button").textContent = "Stop Counter";
+			timerReady = false;
+		} else {
+			clearInterval(timer);
+			timerReady = true;
+			document.querySelector(".count-button").textContent = "Start Counter";
+		}
+	});
+	
+	function startCounter() {
+		time -=1;
+		counterDisplay.textContent = time;
+		if (time <= timeMin) {
+				clearInterval(timer);
+				timerReady = true;
+				time = timeMax;
+				counterDisplay.textContent = time;
+				document.querySelector(".count-button").textContent = "Start Counter";
+			}
+	}
+</script>
+</html>
